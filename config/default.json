@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://braiunito:42922075@devconnector-z3zdw.gcp.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mysecretpass"
+}
