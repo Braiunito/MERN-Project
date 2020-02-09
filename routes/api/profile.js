@@ -6,7 +6,7 @@ const { check, validationResult } = require('express-validator');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
-/* 
+/*
 @route  GET api/profile/me
 @desc   Get the current profile logged in
 @access Private
@@ -30,7 +30,7 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
-/* 
+/*
 @route  POST api/profile
 @desc   Create or edit current profile
 @access Private
@@ -113,7 +113,7 @@ router.post(
   }
 );
 
-/* 
+/*
 @route  GET api/profile
 @desc   Get all profiles
 @access Public
@@ -128,7 +128,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-/* 
+/*
 @route  GET api/profile/user/:user_id
 @desc   Get a specific profile
 @access Public
@@ -152,4 +152,43 @@ router.get('/user/:user_id', async (req, res) => {
     return res.status(500).send('Server error');
   }
 });
+
+/*
+@route  DELETE api/profile
+@desc   DELETE profile, user & posts
+@access Private
+ */
+router.delete('/', auth, async (req, res) => {
+  try {
+    // @todo - remove user posts
+
+    // Remove profile
+    await Profile.findOneAndRemove({ user: req.user.id });
+
+    // Remove User
+    await User.findOneAndRemove({ _id: req.user.id })
+    res.json({ msg: 'User deleted' });
+
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).send('Server error');
+  }
+});
+
+
+/*
+@route  PUT api/profile/experience
+@desc   Add profile experience
+@access Private
+ */
+router.put('/experience',
+  [
+    auth,
+    [
+      check('title', 'Title is required').notEmpty(),
+      check('company', 'Company is required').notEmpty(),
+      check('from', 'From date is required').notEmpty(),
+    ]], async (req, res) => {
+
+    })
 module.exports = router;
